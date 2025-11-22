@@ -1,4 +1,6 @@
 #include <task_handler.h>
+#include <Adafruit_NeoPixel.h>
+
 
 void handleWebSocketMessage(String message)
 {

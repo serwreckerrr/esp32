@@ -21,56 +21,53 @@ void neo_blinky(void *pvParameters){
             alert = !alert;
         }
         if(alert){
-            strip.setPixelColor(0, strip.Color(255, 255, 0)); // Màu Vàng
+            strip.setPixelColor(0, strip.Color(255, 255, 0)); // set to yellow if critical alert
             strip.show();
         }
-        else{
-            strip.clear();
-            strip.show();
+        else{//normal monitoring
+            if(glob_humidity < 70){
+                strip.setPixelColor(0, strip.Color(0, 255, 0)); // Set pixel to green
+                strip.show(); // Update the strip
+
+                // Wait for 500 milliseconds
+                vTaskDelay(500);
+
+                // Set the pixel to off
+                strip.setPixelColor(0, strip.Color(0, 0, 0)); // Turn pixel 0 off
+                strip.show(); // Update the strip
+
+                // Wait for another 500 milliseconds
+                vTaskDelay(500);
+            }   
+            else if(glob_humidity < 80 && glob_humidity >= 70){
+                strip.setPixelColor(0, strip.Color(0, 0, 255)); // Set pixel 0 to blue
+                strip.show(); // Update the strip
+
+                // Wait for 500 milliseconds
+                vTaskDelay(500);
+
+                // Set the pixel to off
+                strip.setPixelColor(0, strip.Color(0, 0, 0)); // Turn pixel 0 off
+                strip.show(); // Update the strip
+
+                // Wait for another 500 milliseconds
+                vTaskDelay(500);
+            }
+            else{
+                strip.setPixelColor(0, strip.Color(255, 0, 0)); // Set pixel 0 to red
+                strip.show(); // Update the strip
+
+                // Wait for 500 milliseconds
+                vTaskDelay(500);
+
+                // Set the pixel to off
+                strip.setPixelColor(0, strip.Color(0, 0, 0)); // Turn pixel 0 off
+                strip.show(); // Update the strip
+
+                // Wait for another 500 milliseconds
+                vTaskDelay(500);
+            }  
         }
-        vTaskDelay(500);
-        // if(glob_humidity < 70){
-        //     strip.setPixelColor(0, strip.Color(0, 255, 0)); // Set pixel 0 to red
-        //     strip.show(); // Update the strip
-
-        //     // Wait for 500 milliseconds
-        //     vTaskDelay(500);
-
-        //     // Set the pixel to off
-        //     strip.setPixelColor(0, strip.Color(0, 0, 0)); // Turn pixel 0 off
-        //     strip.show(); // Update the strip
-
-        //     // Wait for another 500 milliseconds
-        //     vTaskDelay(500);
-        // }   
-        // else if(glob_humidity < 80 && glob_humidity >= 70){
-        //     strip.setPixelColor(0, strip.Color(0, 0, 255)); // Set pixel 0 to red
-        //     strip.show(); // Update the strip
-
-        //     // Wait for 500 milliseconds
-        //     vTaskDelay(500);
-
-        //     // Set the pixel to off
-        //     strip.setPixelColor(0, strip.Color(0, 0, 0)); // Turn pixel 0 off
-        //     strip.show(); // Update the strip
-
-        //     // Wait for another 500 milliseconds
-        //     vTaskDelay(500);
-        // }
-        // else{
-        //     strip.setPixelColor(0, strip.Color(255, 0, 0)); // Set pixel 0 to red
-        //     strip.show(); // Update the strip
-
-        //     // Wait for 500 milliseconds
-        //     vTaskDelay(500);
-
-        //     // Set the pixel to off
-        //     strip.setPixelColor(0, strip.Color(0, 0, 0)); // Turn pixel 0 off
-        //     strip.show(); // Update the strip
-
-        //     // Wait for another 500 milliseconds
-        //     vTaskDelay(500);
-        // }                
-        
+        vTaskDelay(500);                   
     }
 }
