@@ -61,7 +61,7 @@ void temp_humi_monitor(void *pvParameters) {
                 xSemaphoreGive(xSensorDataMutex);
             }
 
-            // Print to Serial (for debugging)
+            //Print to Serial (for debugging)
             Serial.print("Humidity: ");
             Serial.print(humidity);
             Serial.print("%  Temperature: ");

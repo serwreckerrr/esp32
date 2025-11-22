@@ -17,7 +17,7 @@ extern String CORE_IOT_PORT;
 
 extern boolean isWifiConnected;
 extern SemaphoreHandle_t xBinarySemaphoreInternet;
-extern SemaphoreHandle_t xSemaphoreSensorAlert; // <-- ADDED THIS LINE
-extern SemaphoreHandle_t xSensorDataMutex; // <-- ADDED THIS LINE for task 1 and 2
-extern boolean alert;
+extern SemaphoreHandle_t xSemaphoreSensorAlert; //to signal alert
+extern SemaphoreHandle_t xSensorDataMutex; // <-- ADDED THIS LINE for task 1 and 2 to safely access global sensor data
+extern boolean alert;//to indicate alert status
 #endif
