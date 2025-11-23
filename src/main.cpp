@@ -35,10 +35,24 @@ void setup()
   //--CHẠY TASK 6--
  //TaskCreate(Task1_OnBoardLed, "RGB Task", 2048, NULL, 1, NULL);
  //TaskCreate(Task2_VirtualLED, "Virtual", 2048, NULL, 1, NULL);
-//TaskCreate(Task3_Button, "Button",  2048, NULL, 2, NULL);
+ //TaskCreate(Task3_Button, "Button",  2048, NULL, 2, NULL);
 }
 
 void loop()
 {
-  vTaskDelete(NULL);
+  if (check_info_File(1))
+  {
+    if (!Wifi_reconnect())
+    {
+      Webserver_stop();
+    }
+    else
+    {
+      CORE_IOT_reconnect();
+    }
+  }
+  Webserver_reconnect();
+
+  //--CHẠY TASK 6--
+  //vTaskDelete(NULL);
 }
