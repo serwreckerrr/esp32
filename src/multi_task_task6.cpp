@@ -1,67 +1,66 @@
-#include <Arduino.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+#include "multi_task_task6.h"
+#include "global.h"
 
 // --- CẤU HÌNH CHÂN (PIN DEFINITIONS) ---
-#define LED1_PIN 1    
-#define LED2_PIN 2
-#define BUTTON_PIN 0  
+#define BUTTON_PIN 0 
+#define RGB_PIN 45
+#define NUMPIXELS 1
 
 // Biến toàn cục
+Adafruit_NeoPixel pixels(NUMPIXELS, RGB_PIN, NEO_GRB + NEO_KHZ800);
 bool buttonPressed = false;
 
-// --- TASK 1: LED 1 ---
-void TaskBlink1(void *pvParameters) {
-  pinMode(LED1_PIN, OUTPUT);
+// --- TASK 1: LED onboard ---
+void TaskBlinkOnboard(void *pvParameters) {
+  pixels.begin();
+  pixels.setBrightness(50);
+
   while(1) {
-    digitalWrite(LED1_PIN, HIGH);
-    vTaskDelay(1000 / portTICK_PERIOD_MS); 
-    digitalWrite(LED1_PIN, LOW);
-    vTaskDelay(1000 / portTICK_PERIOD_MS);
+    // Bật đèn xanh
+    pixels.setPixelColor(0, pixels.Color(0, 255, 0)); 
+    pixels.show(); // Lệnh bắt buộc để đẩy màu ra đèn
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
+
+    // Bật đèn đỏ
+    pixels.setPixelColor(0, pixels.Color(255, 0, 0));
+    pixels.show();
+    vTaskDelay(2000 / portTICK_PERIOD_MS);
   }
 }
 
-// --- TASK 2: LED 2 ---
-void TaskBlink2(void *pvParameters) {
-  pinMode(LED2_PIN, OUTPUT);
+// --- TASK 2: in chữ ---
+void TaskVirtualLED(void *pvParameters) {
   while(1) {
-    digitalWrite(LED2_PIN, HIGH);
-    vTaskDelay(500 / portTICK_PERIOD_MS);
-    digitalWrite(LED2_PIN, LOW);
-    vTaskDelay(500 / portTICK_PERIOD_MS);
+    Serial.println("\n>>> Đèn chớp <<<");
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
+    vTaskDelay(5000 / portTICK_PERIOD_MS);
   }
 }
 
 // --- TASK 3: BUTTON ---
 void TaskButton(void *pvParameters) {
-  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  pinMode(BUTTON_PIN, INPUT_PULLUP); 
 
   while(1) {
     if (digitalRead(BUTTON_PIN) == LOW) {
       if (!buttonPressed) {
-        Serial.println("PlatformIO: Nút đang được nhấn!");
+        // Bật cả 2 loại đèn sáng TRẮNG
+        pixels.setPixelColor(0, pixels.Color(200, 200, 200));
+        pixels.show();
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
         buttonPressed = true;
       }
     } else {
       buttonPressed = false;
     }
-    vTaskDelay(10 / portTICK_PERIOD_MS); 
+    vTaskDelay(20 / portTICK_PERIOD_MS); 
   }
 }
 
-// --- SETUP ---
-void setup() {
-  Serial.begin(115200);
-  delay(1000);
-  Serial.println("--- Bắt đầu chương trình FreeRTOS trên PlatformIO ---");
 
-  // Tạo các Task
-  xTaskCreate(TaskBlink1, "Blink 1", 2048, NULL, 1, NULL);
-  xTaskCreate(TaskBlink2, "Blink 2", 2048, NULL, 1, NULL);
-  xTaskCreate(TaskButton, "Button",  2048, NULL, 2, NULL);
-}
+// --- SETUP ---
 
 // --- LOOP ---
-void loop() {
-  vTaskDelete(NULL); 
-}
+// void loop() {
+// vTaskDelete(NULL); 
+// }
