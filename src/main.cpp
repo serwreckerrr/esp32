@@ -13,12 +13,13 @@
 #include "task_wifi.h"
 #include "task_webserver.h"
 #include "task_core_iot.h"
+#include "multi_task_task6.h"
 
 void setup()
 {
   Serial.begin(115200);
   check_info_File(0);
-  xTaskCreate(temp_humi_monitor, "Task TEMP HUMI Monitor", 2048, NULL, 2, NULL);
+  //xTaskCreate(temp_humi_monitor, "Task TEMP HUMI Monitor", 2048, NULL, 2, NULL);
   // xTaskCreate(led_blinky, "Task LED Blink", 2048, NULL, 2, NULL);
   // xTaskCreate(neo_blinky, "Task NEO Blink", 2048, NULL, 2, NULL);
   // xTaskCreate(temp_humi_monitor, "Task TEMP HUMI Monitor", 2048, NULL, 2, NULL);
@@ -30,20 +31,14 @@ void setup()
   //192.168.1.11 this is the main web
   
   //xTaskCreate(Task_Toogle_BOOT, "Task_Toogle_BOOT", 4096, NULL, 2, NULL);
+
+  //--CHẠY TASK 6--
+ //TaskCreate(Task1_OnBoardLed, "RGB Task", 2048, NULL, 1, NULL);
+ //TaskCreate(Task2_VirtualLED, "Virtual", 2048, NULL, 1, NULL);
+//TaskCreate(Task3_Button, "Button",  2048, NULL, 2, NULL);
 }
 
 void loop()
 {
-  if (check_info_File(1))
-  {
-    if (!Wifi_reconnect())
-    {
-      Webserver_stop();
-    }
-    else
-    {
-      CORE_IOT_reconnect();
-    }
-  }
-  Webserver_reconnect();
+  vTaskDelete(NULL);
 }

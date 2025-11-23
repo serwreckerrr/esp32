@@ -6,19 +6,18 @@
 #define RGB_PIN 45
 #define NUMPIXELS 1
 
-// Biến toàn cục
 Adafruit_NeoPixel pixels(NUMPIXELS, RGB_PIN, NEO_GRB + NEO_KHZ800);
 bool buttonPressed = false;
 
-// --- TASK 1: LED onboard ---
-void TaskBlinkOnboard(void *pvParameters) {
+// --- TASK 1: Chạy LED trên YOLO UNO ---
+void Task1_OnBoardLed(void *pvParameters) {
   pixels.begin();
   pixels.setBrightness(50);
 
   while(1) {
     // Bật đèn xanh
     pixels.setPixelColor(0, pixels.Color(0, 255, 0)); 
-    pixels.show(); // Lệnh bắt buộc để đẩy màu ra đèn
+    pixels.show(); 
     vTaskDelay(2000 / portTICK_PERIOD_MS);
 
     // Bật đèn đỏ
@@ -28,8 +27,8 @@ void TaskBlinkOnboard(void *pvParameters) {
   }
 }
 
-// --- TASK 2: in chữ ---
-void TaskVirtualLED(void *pvParameters) {
+// --- TASK 2: Giả lập LED bằng Terminal ---
+void Task2_VirtualLED(void *pvParameters) {
   while(1) {
     Serial.println("\n>>> Đèn chớp <<<");
     vTaskDelay(5000 / portTICK_PERIOD_MS);
@@ -37,8 +36,8 @@ void TaskVirtualLED(void *pvParameters) {
   }
 }
 
-// --- TASK 3: BUTTON ---
-void TaskButton(void *pvParameters) {
+// --- TASK 3: Kích hoạt bằng nút Button trên bảng mạch ---
+void Task3_Button(void *pvParameters) {
   pinMode(BUTTON_PIN, INPUT_PULLUP); 
 
   while(1) {
