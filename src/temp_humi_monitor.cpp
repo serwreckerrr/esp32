@@ -96,6 +96,7 @@ void temp_humi_monitor(void *pvParameters) {
                 lcd.print("Temp: ");
                 lcd.print(temperature);
                 lcd.print("C");
+                //turn off alert semaphore
                 if(local_alert == true){
                     xSemaphoreGive(xSemaphoreSensorAlert);
                     local_alert = false;
@@ -113,6 +114,7 @@ void temp_humi_monitor(void *pvParameters) {
                 lcd.print("Humi: ");
                 lcd.print(humidity);
                 lcd.print("%");
+                //turn off alert semaphore
                 if(local_alert == true){
                     xSemaphoreGive(xSemaphoreSensorAlert);
                     local_alert = false;

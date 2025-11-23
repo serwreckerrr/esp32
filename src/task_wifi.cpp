@@ -31,7 +31,7 @@ void startSTA()
         vTaskDelay(100 / portTICK_PERIOD_MS);
     }
 
-    // --- ADD THESE 3 LINES HERE ---
+    //to show connected ip
     Serial.println(""); 
     Serial.print("✅ Connected! New IP Address: ");
     Serial.println(WiFi.localIP()); 
