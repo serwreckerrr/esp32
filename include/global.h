@@ -5,6 +5,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
+#include <freertos/queue.h> // Include Queue support
 
 extern float glob_temperature;
 extern float glob_humidity;
@@ -20,5 +21,9 @@ extern boolean isWifiConnected;
 extern SemaphoreHandle_t xBinarySemaphoreInternet;
 extern SemaphoreHandle_t xSemaphoreSensorAlert; //to signal alert
 extern SemaphoreHandle_t xSensorDataMutex; // <-- ADDED THIS LINE for task 1 and 2 to safely access global sensor data
+
+extern QueueHandle_t xQueueTempLed; // Queue for sending Temp to LED Task
+extern QueueHandle_t xQueueHumiNeo; // Queue for sending Humi to NeoPixel Task
+
 extern boolean alert;//to indicate alert status
 #endif

@@ -61,6 +61,12 @@ void temp_humi_monitor(void *pvParameters) {
                 xSemaphoreGive(xSensorDataMutex);
             }
 
+            // --- SEND TO QUEUES (New Logic) ---
+            // We use xQueueOverwrite to ensure the queue always holds the LATEST value.
+            // Even if the receiver is busy, this replaces the old value with the new one.
+            xQueueOverwrite(xQueueTempLed, &temperature);
+            xQueueOverwrite(xQueueHumiNeo, &humidity);
+
             //Print to Serial (for debugging)
             Serial.print("Humidity: ");
             Serial.print(humidity);

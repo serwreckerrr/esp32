@@ -17,4 +17,11 @@ boolean isWifiConnected = false;
 SemaphoreHandle_t xBinarySemaphoreInternet = xSemaphoreCreateBinary();
 SemaphoreHandle_t xSemaphoreSensorAlert = xSemaphoreCreateBinary(); //alert semaphore
 SemaphoreHandle_t xSensorDataMutex = xSemaphoreCreateMutex(); //synchronize sensor data access
+
+// --- NEW QUEUE INITIALIZATION ---
+// Create queues of size 1. We use size 1 because we only care about 
+// the *most recent* value for blinking status.
+QueueHandle_t xQueueTempLed = xQueueCreate(1, sizeof(float));
+QueueHandle_t xQueueHumiNeo = xQueueCreate(1, sizeof(float));
+
 boolean alert = false;

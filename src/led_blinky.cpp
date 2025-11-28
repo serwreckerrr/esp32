@@ -3,12 +3,14 @@
 void led_blinky(void *pvParameters){
     pinMode(LED_GPIO, OUTPUT);
     float local_temp = 0.0; // Local copy of temperature
+    float received_temp = 0.0; // Temp variable for queue reception
   
   while(1) {           
-    // Safely read the global variable into a local one
-    if (xSemaphoreTake(xSensorDataMutex, (TickType_t)10) == pdTRUE) {
-        local_temp = glob_temperature;
-        xSemaphoreGive(xSensorDataMutex);
+    // --- QUEUE RECEIVE (New Logic) ---
+    // Check if there is a new temperature value in the queue.
+    // We use wait time '0' (non-blocking). If no new data, we continue using old local_temp.
+    if (xQueueReceive(xQueueTempLed, &received_temp, 0) == pdTRUE) {
+        local_temp = received_temp;
     }
 
     //normal blink
