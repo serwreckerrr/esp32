@@ -55,6 +55,7 @@ void Task_Broadcast_Sensor(void *pvParameters) {
             if (xSemaphoreTake(xSensorDataMutex, 100) == pdTRUE) {
                 doc["temperature"] = glob_temperature;
                 doc["humidity"] = glob_humidity;
+                doc["tinyml_result"] = glob_tinyml_result; // Add TinyML result                                                    
                 xSemaphoreGive(xSensorDataMutex);
                 
                 String jsonString;

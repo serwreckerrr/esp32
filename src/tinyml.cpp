@@ -67,6 +67,15 @@ void tiny_ml_task(void *pvParameters)
 
         // Get and process output
         float result = output->data.f[0];
+
+        // --- NEW CODE START ---
+        // Save to global variable with Mutex protection
+        if (xSemaphoreTake(xSensorDataMutex, (TickType_t)10) == pdTRUE) {
+            glob_tinyml_result = result;
+            xSemaphoreGive(xSensorDataMutex);
+        }
+        // --- NEW CODE END ---
+
         Serial.print("Inference result: ");
         Serial.println(result);
 
