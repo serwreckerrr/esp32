@@ -13,8 +13,8 @@
 #include "task_wifi.h"
 #include "task_webserver.h"
 #include "task_core_iot.h"
-#include "task_button_led.h"
-#include "multi_task_task6.h"
+#include "task_queue.h"
+#include "task_vTaskDelay.h"
 
 void setup()
 {
@@ -26,7 +26,7 @@ void setup()
     Serial.println("Error creating buttonQueue");
   }
 
-  xTaskCreate(temp_humi_monitor, "Task TEMP HUMI Monitor", 2048, NULL, 2, NULL);
+  //xTaskCreate(temp_humi_monitor, "Task TEMP HUMI Monitor", 2048, NULL, 2, NULL);
   //xTaskCreate(led_blinky, "Task LED Blink", 2048, NULL, 2, NULL);
   //xTaskCreate(neo_blinky, "Task NEO Blink", 2048, NULL, 2, NULL);
   // xTaskCreate(main_server_task, "Task Main Server" ,8192  ,NULL  ,2 , NULL);
@@ -35,13 +35,13 @@ void setup()
   
   //192.168.4.1 connect here enter info then connect to home wifi and then enter the ip that is printed in the serial monitor
   //192.168.1.11 this is the main web (example)
-  // xTaskCreate(taskButtonSender, "Button Sender", 2048, NULL, 1, NULL);
-  // xTaskCreate(taskLedReceiver, "LED Receiver", 2048, NULL, 1, NULL);
+  xTaskCreate(taskButtonSender, "Button Sender", 2048, NULL, 1, NULL);
+  xTaskCreate(taskLedReceiver, "LED Receiver", 2048, NULL, 1, NULL);
   //xTaskCreate(Task_Toogle_BOOT, "Task_Toogle_BOOT", 4096, NULL, 2, NULL);
-  //--CHẠY TASK 6--
- xTaskCreate(Task1_OnBoardLed, "RGB Task", 2048, NULL, 1, NULL);
+  //--CHẠY TASK 2
+ //xTaskCreate(Task1_OnBoardLed, "RGB Task", 2048, NULL, 1, NULL);
  //TaskCreate(Task2_VirtualLED, "Virtual", 2048, NULL, 1, NULL);
- xTaskCreate(Task3_Button, "Button",  2048, NULL, 2, NULL);
+ //TaskCreate(Task3_Button, "Button",  2048, NULL, 2, NULL);
 }
 
 void loop()

@@ -10,14 +10,12 @@ void neo_blinky(void *pvParameters){
     strip.show();
 
     float local_humi = 0.0;
-    float received_humi = 0.0;
 
     while(1) {  
-        // --- QUEUE RECEIVE (New Logic) ---
-        // Check if there is a new humidity value in the queue.
-        // We use wait time '0' so the animation isn't blocked by waiting for data.     
-        if (xQueueReceive(xQueueHumiNeo, &received_humi, 0) == pdTRUE) {
-            local_humi = received_humi;
+        // Safely read the global variable into a local one
+        if (xSemaphoreTake(xSensorDataMutex, (TickType_t)10) == pdTRUE) {
+            local_humi = glob_humidity;
+            xSemaphoreGive(xSensorDataMutex);
         }
 
         //toggle alert status
@@ -30,7 +28,7 @@ void neo_blinky(void *pvParameters){
             strip.show();
         }
         else{//normal monitoring
-            if(glob_humidity < 70){
+            if(local_humi < 70){
                 strip.setPixelColor(0, strip.Color(0, 255, 0)); // Set pixel to green
                 strip.show(); // Update the strip
 
@@ -44,7 +42,7 @@ void neo_blinky(void *pvParameters){
                 // Wait for another 500 milliseconds
                 vTaskDelay(500);
             }   
-            else if(glob_humidity < 80 && glob_humidity >= 70){
+            else if(local_humi < 80 && local_humi >= 70){
                 strip.setPixelColor(0, strip.Color(0, 0, 255)); // Set pixel 0 to blue
                 strip.show(); // Update the strip
 
